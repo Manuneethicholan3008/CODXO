@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+typedef struct {
+    int id;
+    char name[50];
+    float basicSalary;
+    float hra;       
+    float da;       
+    float tax;      
+    float grossSalary;
+    float netSalary;
+} Employee;
+
+void calculateSalary(Employee *emp);
+void generateSalarySlip(Employee emp);
+
+int main() {
+    Employee emp;
+
+    printf("Enter Employee ID: ");
+    scanf("%d", &emp.id);
+    printf("Enter Employee Name: ");
+    scanf(" %[^\n]", emp.name); 
+    printf("Enter Basic Salary: ");
+    scanf("%f", &emp.basicSalary);
+
+    calculateSalary(&emp);
+    generateSalarySlip(emp);
+
+    return 0;
+}
+
+void calculateSalary(Employee *emp) {
+    
+    emp->hra = 0.2 * emp->basicSalary; 
+    emp->da = 0.1 * emp->basicSalary;   
+    emp->tax = 0.05 * emp->basicSalary; 
+
+    emp->grossSalary = emp->basicSalary + emp->hra + emp->da;
+    emp->netSalary = emp->grossSalary - emp->tax;
+}
+
+void generateSalarySlip(Employee emp) {
+    printf("\n\n----- Employee Salary Slip -----\n");
+    printf("Employee ID: %d\n", emp.id);
+    printf("Employee Name: %s\n", emp.name);
+    printf("-------------------------------\n");
+    printf("Basic Salary:       %.2f\n", emp.basicSalary);
+    printf("HRA (20%%):          %.2f\n", emp.hra);
+    printf("DA (10%%):           %.2f\n", emp.da);
+    printf("Gross Salary:       %.2f\n", emp.grossSalary);
+    printf("Tax Deduction (5%%): %.2f\n", emp.tax);
+    printf("-------------------------------\n");
+    printf("Net Salary:         %.2f\n", emp.netSalary);
+    printf("-------------------------------\n");
+}
