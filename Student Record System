@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+#define NAME_LENGTH 50
+
+typedef struct {
+    int id;
+    char name[NAME_LENGTH];
+    float marks;
+} Student;
+
+void addStudent(Student students[], int *studentCount);
+void displayStudents(Student students[], int studentCount);
+void searchStudentById(Student students[], int studentCount);
+void saveToFile(Student students[], int studentCount);
+void loadFromFile(Student students[], int *studentCount);
+
+int main() {
+    Student students[MAX_STUDENTS];
+    int studentCount = 0;
+    int choice;
+
+    loadFromFile(students, &studentCount); 
+
+    while (1) {
+        printf("\nStudent Record System\n");
+        printf("1. Add Student\n");
+        printf("2. Display All Students\n");
+        printf("3. Search Student by ID\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent(students, &studentCount);
+                saveToFile(students, studentCount);
+                break;
+            case 2:
+                displayStudents(students, studentCount);
+                break;
+            case 3:
+                searchStudentById(students, studentCount);
+                break;
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+                break;
+        }
+    }
+    return 0;
+}
+
+void addStudent(Student students[], int *studentCount) {
+    if (*studentCount >= MAX_STUDENTS) {
+        printf("Cannot add more students. Maximum limit reached.\n");
+        return;
+    }
+
+    Student newStudent;
+    printf("Enter Student ID: ");
+    scanf("%d", &newStudent.id);
+    printf("Enter Student Name: ");
+    scanf(" %[^\n]", newStudent.name);  // Read string with spaces
+    printf("Enter Student Marks: ");
+    scanf("%f", &newStudent.marks);
+
+    students[*studentCount] = newStudent;
+    (*studentCount)++;
+
+    printf("Student added successfully.\n");
+}
+
+void displayStudents(Student students[], int studentCount) {
+    printf("\nStudent Records:\n");
+    for (int i = 0; i < studentCount; i++) {
+        printf("ID: %d, Name: %s, Marks: %.2f\n", students[i].id, students[i].name, students[i].marks);
+    }
+}
+
+void searchStudentById(Student students[], int studentCount) {
+    int id;
+    printf("Enter Student ID to search: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < studentCount; i++) {
+        if (students[i].id == id) {
+            printf("Student found: ID: %d, Name: %s, Marks: %.2f\n", students[i].id, students[i].name, students[i].marks);
+            return;
+        }
+    }
+    printf("Student with ID %d not found.\n", id);
+}
+
+void saveToFile(Student students[], int studentCount) {
+    FILE *file = fopen("students.dat", "wb");
+    if (file == NULL) {
+        printf("Error opening file for saving data.\n");
+        return;
+    }
+
+    fwrite(&studentCount, sizeof(int), 1, file);
+    fwrite(students, sizeof(Student), studentCount, file);
+    fclose(file);
+    printf("Data saved to file successfully.\n");
+}
+
+void loadFromFile(Student students[], int *studentCount) {
+    FILE *file = fopen("students.dat", "rb");
+    if (file == NULL) {
+        printf("No existing data file found. Starting with an empty record.\n");
+        return;
+    }
+
+    fread(studentCount, sizeof(int), 1, file);
+    fread(students, sizeof(Student), *studentCount, file);
+    fclose(file);
+    printf("Data loaded from file successfully.\n");
+}
