@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_STUDENTS 100
-#define NAME_LENGTH 50
-
 typedef struct {
     int id;
     char name[NAME_LENGTH];
