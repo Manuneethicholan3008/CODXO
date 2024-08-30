@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+int askQuestion(const char *question, const char *option1, const char *option2, const char *option3, const char *option4, char correctOption) {
+    char answer;
+
+    printf("%s\n", question);
+    printf("A. %s\n", option1);
+    printf("B. %s\n", option2);
+    printf("C. %s\n", option3);
+    printf("D. %s\n", option4);
+    printf("Your answer: ");
+    scanf(" %c", &answer);
+
+    if (answer >= 'a' && answer <= 'z') {
+        answer -= 32;
+    }
+
+    if (answer == correctOption) {
+        printf("Correct!\n\n");
+        return 1;
+    } else {
+        printf("Incorrect. The correct answer was %c.\n\n", correctOption);
+        return 0;
+    }
+}
+
+int main() {
+    int score = 0;
+
+    printf("Welcome to the Quiz Game!\n");
+    printf("Answer the following questions by choosing the correct option (A, B, C, or D).\n\n");
+
+    score += askQuestion("What is the capital of France?",
+                         "Berlin", "Madrid", "Paris", "Rome", 'C');
+
+    score += askQuestion("Which planet is known as the Red Planet?",
+                         "Earth", "Mars", "Jupiter", "Saturn", 'B');
+
+    score += askQuestion("Which language is used for web development?",
+                         "Python", "Java", "C++", "JavaScript", 'D');
+
+    score += askQuestion("What is the largest ocean on Earth?",
+                         "Indian Ocean", "Arctic Ocean", "Atlantic Ocean", "Pacific Ocean", 'D');
+
+    printf("Quiz Over!\n");
+    printf("Your total score is: %d out of 4\n", score);
+
+    return 0;
+}
